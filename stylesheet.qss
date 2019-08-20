@@ -1,0 +1,131 @@
+QWidget { 
+  background-color: #333;
+  color: #fff;
+}
+
+
+/* plain text edit */
+
+QPlainTextEdit { 
+    background-color: #222;
+    font-family: "Ubuntu Mono";
+    font-size: 17px;
+}
+
+
+/* list widget */
+
+QListWidget { 
+    background-color: #111;
+}
+
+QListWidget::item { 
+    background-color: #111;
+    margin-top: 8px;
+}
+
+QListWidget::item:selected { 
+    background-color: #111;
+}
+
+
+/* pushbutton */
+
+QPushButton {
+    color: #eee;
+    background-color: #111;
+    border-radius: 3px;
+    border: 1px solid #244;
+    padding: 10px;
+    min-width: 80px;
+}
+QPushButton:hover {
+    color: #aef;
+    background-color: #1a1a1a;
+    border: 1px solid #aef;
+}
+QPushButton:disabled {
+    color: #666;
+    background-color: #222;
+}
+QPushButton:pressed { 
+    background-color: #579;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+
+/* slider */
+
+QSlider::groove:horizontal {
+    height: 15px;
+    margin: 2px 0;
+}
+QSlider::handle:horizontal {
+    background: #111;
+    width: 15px;
+    height: 15px;
+    border: 3px solid #aaa;
+}
+QSlider::add-page:horizontal {
+    background: #555;
+}
+QSlider::sub-page:horizontal {
+    background: #aaa;
+}
+
+
+/* scrollbar */
+
+QScrollBar:vertical {
+    border: 2px solid grey;
+    background: #333;
+    width: 15px;
+    margin: 22px 0 22px 0;
+    border: none;
+}
+QScrollBar::handle:vertical {
+    background: #111;
+    min-height: 20px;
+    border: 1px solid #222;
+    border-radius: 4px;
+}
+/* button for scrolling down */
+QScrollBar::add-line:vertical {
+    background: #111;
+    height: 20px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+    border-radius: 4px;
+}
+/* button for scrolling up */
+QScrollBar::sub-line:vertical {
+    background: #111;
+    height: 20px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+    border-radius: 4px;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    width: 3px;
+    height: 3px;
+    background: #eee;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+
+/* progress bar */
+
+QProgressBar {
+    border: 0px solid #aaa;
+    border-radius: 5px;
+    background-color: #555;
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    background-color: #0b4;
+    width: 20px;
+}
