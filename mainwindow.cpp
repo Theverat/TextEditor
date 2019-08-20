@@ -23,41 +23,81 @@ MainWindow::MainWindow(QWidget *parent) :
         file.close();
     }
     
+    ui->editor->installEventFilter(this);
+    
     // Debug
     loadFile("/home/simon/Projekte/BlendLuxCore/handlers/draw_imageeditor.py");
     ui->search->setText("context");
     search();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
+
+
+bool MainWindow::eventFilter(QObject* target, QEvent* event) {
+    if(target == ui->editor) {
+        if(event->type() == QEvent::KeyPress) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            if (keyEvent->key() == Qt::Key_Return) {
+                // We are at the end of the old line
+                QTextCursor cursor = ui->editor->textCursor();
+                const QString text = ui->editor->toPlainText();
+                // Go back to the start of the line
+                int pos = cursor.position();
+                while (pos > 0) {
+                    --pos;
+                    if (text[pos] == '\n') {
+                        ++pos;
+                        break;
+                    }
+                }
+                // Insert same amount of spaces in the new line
+                QString spaces("\n");
+                while (pos < text.size() && text[pos] == ' ') {
+                    spaces.append(' ');
+                    ++pos;
+                }
+                cursor.insertText(spaces);
+                return true;
+            } else if (keyEvent->key() == Qt::Key_Tab) {
+                QTextCursor cursor = ui->editor->textCursor();
+                cursor.insertText("    ");
+                return true;
+            }
+            // TODO backspace: delete four spaces if there are enough
+            // TODO detect "for", "if" etc. at start of old line and add four spaces?
+        }
+    }
+    return QWidget::eventFilter(target, event);
+}
+
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
 //    qDebug() << "keypress";
     
-    if (true) { // TODO check for control modifier (for f and r)
-        if (event->key() == Qt::Key_F) {
-            qDebug() << "ctrl F";
-            ui->search->show();
+    const bool ctrlPressed = event->modifiers() & Qt::ControlModifier;
+    
+    if (ctrlPressed && event->key() == Qt::Key_F) {
+        qDebug() << "ctrl F";
+        ui->search->show();
+        ui->search->setFocus();
+        createHighlights();
+    } else if (ctrlPressed && event->key() == Qt::Key_R) {
+        qDebug() << "ctrl R";
+        if (ui->search->isVisible())
+            ui->replace->setFocus();
+        else
             ui->search->setFocus();
-            createHighlights();
-        } else if (event->key() == Qt::Key_R) {
-            qDebug() << "ctrl R";
-            if (ui->search->isVisible())
-                ui->replace->setFocus();
-            else
-                ui->search->setFocus();
-            ui->search->show();
-            ui->replace->show();
-            createHighlights();
-        } else if (event->key() == Qt::Key_Escape) {
-            qDebug() << "escape";
-            ui->search->hide();
-            ui->replace->hide();
-            clearHighlights();
-        }
+        ui->search->show();
+        ui->replace->show();
+        createHighlights();
+    } else if (event->key() == Qt::Key_Escape) {
+        qDebug() << "escape";
+        ui->search->hide();
+        ui->replace->hide();
+        clearHighlights();
     }
 }
 

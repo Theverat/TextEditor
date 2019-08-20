@@ -14,6 +14,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    bool eventFilter(QObject* target, QEvent* event);
     
 protected:
     virtual void keyPressEvent(QKeyEvent *event);

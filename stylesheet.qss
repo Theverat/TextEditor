@@ -6,7 +6,16 @@ QWidget {
 
 /* plain text edit */
 
-QPlainTextEdit { 
+QPlainTextEdit {
+    background-color: #222;
+    font-family: "Ubuntu Mono";
+    font-size: 17px;
+}
+
+
+/* line edit */
+
+QLineEdit {
     background-color: #222;
     font-family: "Ubuntu Mono";
     font-size: 17px;
