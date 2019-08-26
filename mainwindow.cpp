@@ -53,11 +53,34 @@ bool MainWindow::eventFilter(QObject* target, QEvent* event) {
                         break;
                     }
                 }
-                // Insert same amount of spaces in the new line
+                
+                // Find the first word in the old line
+                QString firstWord;
+                int i = pos;
+                while (i < text.size()) {
+                    const QChar c = text[i];
+                    if (c == ' ' || c == '(') {
+                        if (firstWord.size() != 0) {
+                            // End of first word
+                            break;
+                        }
+                    } else {
+                        firstWord.append(c);
+                    }
+                    ++i;
+                }
+                
+                // Insert correct amount of spaces in the new line
                 QString spaces("\n");
                 while (pos < text.size() && text[pos] == ' ') {
                     spaces.append(' ');
                     ++pos;
+                }
+                // Increase indentation level after certain keywords
+                QStringList keywords;
+                keywords << "if" << "while" << "for" << "def" << "class";
+                if (keywords.contains(firstWord)) {
+                    spaces.append("    ");
                 }
                 cursor.insertText(spaces);
                 return true;
@@ -67,7 +90,6 @@ bool MainWindow::eventFilter(QObject* target, QEvent* event) {
                 return true;
             }
             // TODO backspace: delete four spaces if there are enough
-            // TODO detect "for", "if" etc. at start of old line and add four spaces?
         }
     }
     return QWidget::eventFilter(target, event);
@@ -163,12 +185,19 @@ void MainWindow::search() {
     std::vector<int> matches = findMatches(searchTerm);
     
     QTextCursor cursor = ui->editor->textCursor();
+    bool foundMatch = false;
     for (int match : matches) {
         if (match > cursor.position()) {
             cursor.setPosition(match);
             cursor.setPosition(match + searchTerm.size(), QTextCursor::KeepAnchor);
+            foundMatch = true;
             break;
         }
+    }
+    if (!foundMatch && matches.size() > 0) {
+        // Wrap around
+        cursor.setPosition(matches[0]);
+        cursor.setPosition(matches[0] + searchTerm.size(), QTextCursor::KeepAnchor);
     }
     ui->editor->setTextCursor(cursor);
 }

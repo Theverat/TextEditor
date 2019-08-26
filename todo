@@ -1,0 +1,9 @@
+- [ ] refactor: rename variable (requires AST?)
+- [ ] syntax highlighting
+- [ ] load whole project in a folder and list it in UI, allow to jump between files
+- [ ] shift + tab in search field for searching backwards
+- [ ] make wrap around optional
+- [ ] add options for case sensitive search, regex search etc.
+- [ ] make multiline search/replace possible
+- [ ] backspace: delete four spaces if there are enough
+- [ ] on newline: detect "for", "if" etc. at start of old line and add four spaces?
